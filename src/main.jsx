@@ -17,6 +17,7 @@ const PROMPT_PRICE = "$1.99";
 const KO_FI_URL = import.meta.env.VITE_KOFI_URL || "https://ko-fi.com/chaimmage";
 const IMAGES_JSON_URL = import.meta.env.VITE_IMAGES_JSON_URL || "";
 const COLLECTIONS_JSON_URL = import.meta.env.VITE_COLLECTIONS_JSON_URL || "";
+const CURRENT_YEAR = new Date().getFullYear();
 
 const sampleCollections = [
   {
@@ -285,6 +286,9 @@ function Footer() {
           <p className="mt-3 text-sm text-slate-600">
             Free image downloads. Full prompt packs are optional digital products
             priced at {PROMPT_PRICE}.
+          </p>
+          <p className="mt-4 text-xs font-semibold text-slate-400">
+            © {CURRENT_YEAR} chaimmage. All rights reserved.
           </p>
         </div>
       </div>
@@ -777,27 +781,102 @@ function Licence() {
       <PageTitle
         icon={<ShieldCheck />}
         label="Licence"
-        title="Simple terms for images and prompts."
-        text="This starter wording is practical for launch. Have it reviewed professionally if you need formal legal protection."
+        title="Licence, usage rights, and copyright."
+        text="These terms explain how you may use free chaimmage images and paid prompt packs. This is practical starter wording for launch; get professional legal advice if you need formal protection for a larger commercial operation."
       />
+
+      <div className="mb-8 rounded-[2rem] bg-gradient-to-br from-[#17112B] to-purple-600 p-8 text-white shadow-[0_24px_80px_rgba(124,58,237,0.25)]">
+        <h2 className="text-2xl font-black">Copyright notice</h2>
+        <p className="mt-3 leading-8 text-white/85">
+          © {CURRENT_YEAR} chaimmage. All rights reserved. The chaimmage website,
+          brand presentation, collection structure, prompt-pack files, written
+          descriptions, and supporting catalogue content are protected by
+          copyright and may not be copied, republished, scraped, resold, or
+          redistributed as a competing library or prompt marketplace.
+        </p>
+      </div>
+
       <div className="space-y-6">
-        <PolicyCard title="Free Image Licence">
-          You may download and use the free images for personal and commercial
-          creative projects, including websites, social media, videos,
-          presentations, posters, and design work. You may not resell,
-          redistribute, or repackage the free images as a competing standalone
-          image library, stock image pack, or bulk download collection.
+        <PolicyCard title="1. Free image licence">
+          All AI-generated images made available for free download on chaimmage
+          may be used for personal and commercial creative projects. This
+          includes use in websites, social media posts, presentations, videos,
+          posters, mockups, design concepts, editorial layouts, and other
+          creative materials.
         </PolicyCard>
-        <PolicyCard title="Prompt Pack Licence">
-          Prompt packs are paid digital products. Buyers may use the prompts to
-          generate new creative outputs for personal or commercial projects.
-          Prompt packs may not be resold, redistributed, copied into another
-          prompt marketplace, shared publicly, or repackaged as a competing
-          prompt collection.
+
+        <PolicyCard title="2. Attribution">
+          Attribution is appreciated but not required. A link back to
+          chaimmage.com helps the library grow and supports the creation of more
+          free image resources.
         </PolicyCard>
-        <PolicyCard title="Disclaimer">
-          Users are responsible for checking whether an image or prompt output is
-          suitable for their specific legal, commercial, or platform use.
+
+        <PolicyCard title="3. Prompt-pack licence">
+          Prompt packs purchased for {PROMPT_PRICE} via Ko-fi are licensed to
+          the buyer for unlimited personal and commercial creative use. Buyers
+          may use the prompts to generate new images, adapt the prompts for their
+          own creative workflow, and use resulting outputs in personal or
+          commercial projects.
+        </PolicyCard>
+
+        <PolicyCard title="4. Prompt-pack restrictions">
+          You may not resell, redistribute, share publicly, upload, copy into
+          another prompt marketplace, include in a competing prompt collection,
+          or repackage the prompt files themselves as a standalone product. The
+          licence gives you the right to use the prompts creatively, not to sell
+          or distribute the prompt pack.
+        </PolicyCard>
+
+        <PolicyCard title="5. Image redistribution restrictions">
+          You may not resell, redistribute, mirror, scrape, bulk-download, or
+          repackage the free images as a competing standalone image library,
+          stock image pack, dataset, download collection, or marketplace product.
+          The images are free for use in creative projects, not for cloning the
+          chaimmage library.
+        </PolicyCard>
+
+        <PolicyCard title="6. Prohibited uses">
+          Do not use chaimmage images, prompts, or generated outputs to create
+          content that is illegal, hateful, abusive, misleading, defamatory, or
+          that misrepresents real people, organisations, products, events, or
+          evidence. You are responsible for ensuring your use is lawful and
+          appropriate for your intended platform, audience, and jurisdiction.
+        </PolicyCard>
+
+        <PolicyCard title="7. AI-generated content disclaimer">
+          chaimmage images and prompt examples are AI-generated or AI-assisted.
+          They may contain visual inaccuracies, fictional details, imperfect
+          anatomy, unrealistic objects, or other artefacts. Users should review
+          all images and generated outputs carefully before publication or
+          commercial use.
+        </PolicyCard>
+
+        <PolicyCard title="8. Third-party platforms and payment">
+          Paid prompt packs are currently sold and delivered through Ko-fi.
+          Purchases, payment processing, receipts, and digital delivery may be
+          subject to Ko-fi’s own terms and policies in addition to the chaimmage
+          licence terms shown here.
+        </PolicyCard>
+
+        <PolicyCard title="9. No exclusivity">
+          Free images and prompt packs are non-exclusive. Other users may
+          download the same free images, purchase the same prompt packs, or
+          create similar outputs using similar tools and prompts.
+        </PolicyCard>
+
+        <PolicyCard title="10. No warranty">
+          chaimmage provides images, prompt packs, descriptions, and related
+          content “as is”, without warranty of any kind. chaimmage does not
+          guarantee that any image, prompt, or generated output will be suitable
+          for a specific commercial, legal, advertising, trademark, platform, or
+          professional use.
+        </PolicyCard>
+
+        <PolicyCard title="11. Updates to these terms">
+          chaimmage may update this licence from time to time as the library,
+          prompt packs, platform integrations, and commercial model develop.
+          Continued use of the website or purchased prompt packs means you
+          accept the latest version of these terms.
         </PolicyCard>
       </div>
     </main>

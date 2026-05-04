@@ -54,3 +54,41 @@ VITE_KOFI_URL=https://ko-fi.com/chaimmage
 - Prompt pack price is set to $1.99.
 - No login is required.
 - Donation link goes to https://ko-fi.com/chaimmage.
+
+
+## Display order
+
+The website now uses these ordering rules:
+
+- Homepage collections: featured first, then newest upload date.
+- Homepage image preview: featured first, then newest upload date.
+- Gallery page: newest images first.
+- Collections page: featured collections first, then newest upload date.
+- Collection detail page: manual `sortOrder` first, then title.
+
+The ordering works best when your `images.json` and `collections.json` include:
+
+```text
+featured
+sortOrder
+uploadDate
+```
+
+The updated n8n v2 workflow outputs these fields.
+
+
+## Licence and copyright update
+
+The Licence page now includes:
+
+- Dynamic copyright year using JavaScript.
+- Free image licence.
+- Attribution guidance.
+- Paid prompt-pack licence.
+- Restrictions on prompt resale and image library repackaging.
+- Prohibited uses.
+- AI-generated content disclaimer.
+- Ko-fi/payment note.
+- No exclusivity.
+- No warranty.
+- Terms update notice.
