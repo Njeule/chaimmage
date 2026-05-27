@@ -1,94 +1,57 @@
-# chaimmage Website — Updated Tailwind v4 Version
+# PromptWagon Website
 
-This version fixes the Tailwind/PostCSS error by using the official Tailwind Vite plugin.
+React + Vite + Tailwind site for PromptWagon, a creative AI asset marketplace for free AI images and premium prompt packs.
 
-## Test locally
+## Live brand details
+
+- Brand: PromptWagon
+- Website: https://promptwagon.com
+- Contact: info@promptwagon.com
+- Ko-fi/shop: https://ko-fi.com/promptwagon
+- Prompt pack price: $2.99
+
+## Assets included
+
+The project now includes:
+
+- `public/logo.png` — PromptWagon full logo
+- `public/icon.png` — PromptWagon icon/favicon
+
+## Environment variables
+
+Create a `.env` file or set these in your hosting dashboard:
+
+```env
+VITE_IMAGES_JSON_URL=https://assets.promptwagon.com/data/images.json
+VITE_COLLECTIONS_JSON_URL=https://assets.promptwagon.com/data/collections.json
+VITE_KOFI_URL=https://ko-fi.com/promptwagon
+```
+
+## Development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the local URL shown in the terminal.
-
-## Build test
+## Production build
 
 ```bash
 npm run build
 ```
 
-## Cloudflare Pages settings
-
-Framework preset:
-
-```text
-Vite
-```
-
-Build command:
-
-```text
-npm run build
-```
-
-Build output directory:
+The production output folder is:
 
 ```text
 dist
 ```
 
-## Environment variables
+## Cloudflare Pages settings
 
-For sample data, you do not need any environment variables.
-
-When your Cloudflare R2 JSON files are ready, set:
-
-```text
-VITE_IMAGES_JSON_URL=https://images.yourdomain.com/data/images.json
-VITE_COLLECTIONS_JSON_URL=https://images.yourdomain.com/data/collections.json
-VITE_KOFI_URL=https://ko-fi.com/chaimmage
-```
+- Framework preset: Vite
+- Build command: `npm run build`
+- Build output directory: `dist`
 
 ## Notes
 
-- Prompt pack price is set to $1.99.
-- No login is required.
-- Donation link goes to https://ko-fi.com/chaimmage.
-
-
-## Display order
-
-The website now uses these ordering rules:
-
-- Homepage collections: featured first, then newest upload date.
-- Homepage image preview: featured first, then newest upload date.
-- Gallery page: newest images first.
-- Collections page: featured collections first, then newest upload date.
-- Collection detail page: manual `sortOrder` first, then title.
-
-The ordering works best when your `images.json` and `collections.json` include:
-
-```text
-featured
-sortOrder
-uploadDate
-```
-
-The updated n8n v2 workflow outputs these fields.
-
-
-## Licence and copyright update
-
-The Licence page now includes:
-
-- Dynamic copyright year using JavaScript.
-- Free image licence.
-- Attribution guidance.
-- Paid prompt-pack licence.
-- Restrictions on prompt resale and image library repackaging.
-- Prohibited uses.
-- AI-generated content disclaimer.
-- Ko-fi/payment note.
-- No exclusivity.
-- No warranty.
-- Terms update notice.
+The site is configured for the live PromptWagon brand, pricing, shop URL, contact email, logo, icon, and launch licence terms.

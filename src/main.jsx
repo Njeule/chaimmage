@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 import "./styles.css";
 
-const PROMPT_PRICE = "$1.99";
-const KO_FI_URL = import.meta.env.VITE_KOFI_URL || "https://ko-fi.com/chaimmage";
+const PROMPT_PRICE = "$2.99";
+const KO_FI_URL = import.meta.env.VITE_KOFI_URL || "https://ko-fi.com/promptwagon";
 const IMAGES_JSON_URL = import.meta.env.VITE_IMAGES_JSON_URL || "";
 const COLLECTIONS_JSON_URL = import.meta.env.VITE_COLLECTIONS_JSON_URL || "";
 const CURRENT_YEAR = new Date().getFullYear();
@@ -225,12 +225,16 @@ function Header() {
     <header className="sticky top-0 z-50 border-b border-white/20 bg-white/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <button onClick={() => go("/")} className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 via-pink-500 to-amber-500 text-white shadow-[0_24px_80px_rgba(124,58,237,0.25)]">
-            <Sparkles size={22} />
-          </div>
-          <div className="text-left">
-            <p className="text-xl font-black tracking-tight text-[#17112B]">chaimmage</p>
-            <p className="-mt-1 text-xs font-medium text-slate-500">
+          <img
+            src="/icon.png"
+            alt="PromptWagon icon"
+            className="h-11 w-11 rounded-2xl object-contain shadow-[0_18px_60px_rgba(124,58,237,0.16)]"
+          />
+          <div className="text-left leading-tight">
+            <p className="text-xl font-black tracking-tight text-[#17112B]">
+              Prompt<span className="bg-gradient-to-r from-fuchsia-500 to-orange-500 bg-clip-text text-transparent">W</span>agon
+            </p>
+            <p className="text-xs font-medium text-slate-500">
               Download the Image. Unlock the Prompt.
             </p>
           </div>
@@ -266,10 +270,15 @@ function Footer() {
     <footer className="mt-20 border-t border-slate-200 bg-white">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
         <div>
-          <p className="text-2xl font-black text-[#17112B]">chaimmage</p>
-          <p className="mt-2 max-w-sm text-sm text-slate-600">
-            A colourful AI image marketplace-style library where images are free
-            and prompt packs unlock creative control.
+          <div className="flex items-center gap-3">
+            <img src="/icon.png" alt="PromptWagon icon" className="h-10 w-10 rounded-xl object-contain" />
+            <p className="text-xl font-black tracking-tight text-[#17112B]">
+              Prompt<span className="bg-gradient-to-r from-fuchsia-500 to-orange-500 bg-clip-text text-transparent">W</span>agon
+            </p>
+          </div>
+          <p className="mt-3 max-w-sm text-sm text-slate-600">
+            A colourful AI asset marketplace where images are free and prompt
+            packs unlock creative control.
           </p>
         </div>
         <div>
@@ -288,7 +297,7 @@ function Footer() {
             priced at {PROMPT_PRICE}.
           </p>
           <p className="mt-4 text-xs font-semibold text-slate-400">
-            © {CURRENT_YEAR} chaimmage. All rights reserved.
+            © {CURRENT_YEAR} PromptWagon. All rights reserved.
           </p>
         </div>
       </div>
@@ -314,9 +323,9 @@ function Hero() {
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-700">
-            chaimmage is a free AI image library for creators, designers, and
-            storytellers. Download images for free, then unlock the full prompt
-            set behind each collection for {PROMPT_PRICE}.
+            PromptWagon is a creative AI asset marketplace for creators,
+            designers, and storytellers. Download images for free, then unlock
+            the full prompt pack behind each collection for {PROMPT_PRICE}.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
@@ -557,10 +566,11 @@ function Home({ collections, images, notice, loading }) {
         <PromptPackBox />
         <div className="rounded-[2rem] bg-white p-8 shadow-lg ring-1 ring-slate-100">
           <ShieldCheck className="text-cyan-500" size={34} />
-          <h2 className="mt-4 text-3xl font-black text-[#17112B]">No login needed at launch.</h2>
+          <h2 className="mt-4 text-3xl font-black text-[#17112B]">No login needed.</h2>
           <p className="mt-4 text-slate-600">
             Visitors browse and download free images directly. Paid prompt packs
-            are handled through Ko-fi, so chaimmage stays simple and fast.
+            are handled through Ko-fi, keeping PromptWagon simple, fast, and
+            creator-friendly.
           </p>
           <a
             href="#/licence"
@@ -660,7 +670,7 @@ function Collections({ collections, images }) {
         icon={<WandSparkles />}
         label="Prompt collections"
         title={`Full prompt packs for ${PROMPT_PRICE}.`}
-        text="Each collection includes free image examples and an optional paid prompt pack with the template, examples, and guidance."
+        text="Each collection includes free downloadable images and an optional paid prompt pack with the full template, ready-to-use prompts, and creative guidance."
       />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {collections.map((collection) => (
@@ -780,103 +790,115 @@ function Licence() {
     <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
       <PageTitle
         icon={<ShieldCheck />}
-        label="Licence"
-        title="Licence, usage rights, and copyright."
-        text="These terms explain how you may use free chaimmage images and paid prompt packs. This is practical starter wording for launch; get professional legal advice if you need formal protection for a larger commercial operation."
+        label="Licence Terms"
+        title="Licence terms, usage rights, and copyright."
+        text="These terms explain how you may use PromptWagon free images and paid prompt packs. By downloading free images, purchasing prompt packs, or using this website, you agree to these terms."
       />
 
       <div className="mb-8 rounded-[2rem] bg-gradient-to-br from-[#17112B] to-purple-600 p-8 text-white shadow-[0_24px_80px_rgba(124,58,237,0.25)]">
         <h2 className="text-2xl font-black">Copyright notice</h2>
         <p className="mt-3 leading-8 text-white/85">
-          © {CURRENT_YEAR} chaimmage. All rights reserved. The chaimmage website,
-          brand presentation, collection structure, prompt-pack files, written
-          descriptions, and supporting catalogue content are protected by
-          copyright and may not be copied, republished, scraped, resold, or
-          redistributed as a competing library or prompt marketplace.
+          © {CURRENT_YEAR} PromptWagon. All rights reserved. The PromptWagon
+          website, logo, brand presentation, collection structure, prompt-pack
+          files, written descriptions, catalogue content, page design, and
+          supporting materials are protected and may not be copied, scraped,
+          republished, resold, or redistributed as a competing image library,
+          prompt marketplace, dataset, or digital product catalogue.
         </p>
       </div>
 
       <div className="space-y-6">
         <PolicyCard title="1. Free image licence">
-          All AI-generated images made available for free download on chaimmage
-          may be used for personal and commercial creative projects. This
-          includes use in websites, social media posts, presentations, videos,
-          posters, mockups, design concepts, editorial layouts, and other
-          creative materials.
+          Free AI-generated images made available for download on PromptWagon may
+          be used in personal and commercial creative projects. This includes use
+          in websites, social media posts, presentations, videos, posters,
+          mockups, product concepts, digital products, editorial layouts,
+          advertising concepts, and other creative materials, provided the use
+          complies with these terms.
         </PolicyCard>
 
         <PolicyCard title="2. Attribution">
-          Attribution is appreciated but not required. A link back to
-          chaimmage.com helps the library grow and supports the creation of more
-          free image resources.
+          Attribution is appreciated but not required. Where practical, crediting
+          PromptWagon or linking to promptwagon.com helps support the free image
+          library and the creation of new collections.
         </PolicyCard>
 
-        <PolicyCard title="3. Prompt-pack licence">
-          Prompt packs purchased for {PROMPT_PRICE} via Ko-fi are licensed to
+        <PolicyCard title="3. Paid prompt-pack licence">
+          Prompt packs purchased for {PROMPT_PRICE} through Ko-fi are licensed to
           the buyer for unlimited personal and commercial creative use. Buyers
           may use the prompts to generate new images, adapt the prompts for their
-          own creative workflow, and use resulting outputs in personal or
-          commercial projects.
+          own workflow, and use resulting outputs in personal or commercial
+          projects, subject to the rules of any AI tool or third-party platform
+          used to generate those outputs.
         </PolicyCard>
 
         <PolicyCard title="4. Prompt-pack restrictions">
           You may not resell, redistribute, share publicly, upload, copy into
           another prompt marketplace, include in a competing prompt collection,
-          or repackage the prompt files themselves as a standalone product. The
-          licence gives you the right to use the prompts creatively, not to sell
-          or distribute the prompt pack.
+          or repackage the prompt-pack files themselves as a standalone product.
+          The licence allows creative use of the prompts; it does not allow sale,
+          transfer, public sharing, or distribution of the prompt pack.
         </PolicyCard>
 
         <PolicyCard title="5. Image redistribution restrictions">
           You may not resell, redistribute, mirror, scrape, bulk-download, or
-          repackage the free images as a competing standalone image library,
-          stock image pack, dataset, download collection, or marketplace product.
-          The images are free for use in creative projects, not for cloning the
-          chaimmage library.
+          repackage PromptWagon free images as a competing standalone image
+          library, stock image bundle, dataset, download collection, or
+          marketplace product. The images are free for use in creative projects,
+          not for cloning or competing with the PromptWagon library.
         </PolicyCard>
 
         <PolicyCard title="6. Prohibited uses">
-          Do not use chaimmage images, prompts, or generated outputs to create
-          content that is illegal, hateful, abusive, misleading, defamatory, or
-          that misrepresents real people, organisations, products, events, or
-          evidence. You are responsible for ensuring your use is lawful and
-          appropriate for your intended platform, audience, and jurisdiction.
+          Do not use PromptWagon images, prompts, prompt-pack files, or generated
+          outputs for unlawful, harmful, abusive, hateful, misleading,
+          defamatory, deceptive, or rights-infringing purposes. Do not use them
+          to misrepresent real people, organisations, products, events, evidence,
+          endorsements, or factual claims. You are responsible for ensuring your
+          use is lawful and appropriate for your intended platform, audience, and
+          jurisdiction.
         </PolicyCard>
 
         <PolicyCard title="7. AI-generated content disclaimer">
-          chaimmage images and prompt examples are AI-generated or AI-assisted.
-          They may contain visual inaccuracies, fictional details, imperfect
-          anatomy, unrealistic objects, or other artefacts. Users should review
-          all images and generated outputs carefully before publication or
-          commercial use.
+          PromptWagon images, prompt examples, and related outputs may be
+          AI-generated or AI-assisted. They may contain visual inaccuracies,
+          fictional details, artefacts, unrealistic objects, or other limitations.
+          You should review all images, prompts, and generated outputs carefully
+          before publication, resale, advertising, or commercial use.
         </PolicyCard>
 
         <PolicyCard title="8. Third-party platforms and payment">
           Paid prompt packs are currently sold and delivered through Ko-fi.
-          Purchases, payment processing, receipts, and digital delivery may be
-          subject to Ko-fi’s own terms and policies in addition to the chaimmage
-          licence terms shown here.
+          Purchases, payment processing, receipts, refunds, account access, and
+          digital delivery may be subject to Ko-fi’s own terms and policies in
+          addition to these PromptWagon licence terms.
         </PolicyCard>
 
         <PolicyCard title="9. No exclusivity">
           Free images and prompt packs are non-exclusive. Other users may
           download the same free images, purchase the same prompt packs, or
-          create similar outputs using similar tools and prompts.
+          create similar outputs using similar tools, prompts, models, styles, or
+          workflows.
         </PolicyCard>
 
         <PolicyCard title="10. No warranty">
-          chaimmage provides images, prompt packs, descriptions, and related
-          content “as is”, without warranty of any kind. chaimmage does not
-          guarantee that any image, prompt, or generated output will be suitable
-          for a specific commercial, legal, advertising, trademark, platform, or
-          professional use.
+          PromptWagon provides images, prompt packs, descriptions, and related
+          content “as is”, without warranty of any kind. PromptWagon does not
+          guarantee that any image, prompt, generated output, file, description,
+          or creative concept will be suitable for a specific commercial, legal,
+          advertising, trademark, platform, professional, or regulatory use.
         </PolicyCard>
 
         <PolicyCard title="11. Updates to these terms">
-          chaimmage may update this licence from time to time as the library,
-          prompt packs, platform integrations, and commercial model develop.
-          Continued use of the website or purchased prompt packs means you
-          accept the latest version of these terms.
+          PromptWagon may update these licence terms from time to time as the
+          library, prompt packs, platform integrations, pricing, delivery method,
+          and commercial model develop. Continued use of the website, free
+          downloads, or purchased prompt packs means you accept the latest
+          version of these terms.
+        </PolicyCard>
+
+        <PolicyCard title="12. Contact">
+          For licence questions, permissions, collaborations, or support, contact
+          PromptWagon at info@promptwagon.com.
         </PolicyCard>
       </div>
     </main>
@@ -898,7 +920,7 @@ function Support() {
       <PageTitle
         icon={<Gift />}
         label="Support"
-        title="Help keep chaimmage growing."
+        title="Help keep PromptWagon growing."
         text="Images are free to download. Prompt packs and donations help support storage, organisation, new collections, and ongoing improvements."
       />
       <div className="grid gap-6 md:grid-cols-2">
@@ -913,20 +935,20 @@ function Support() {
             rel="noreferrer"
             className="mt-6 inline-flex rounded-full bg-white px-6 py-3 font-black text-[#17112B] hover:bg-amber-400"
           >
-            Support chaimmage
+            Support PromptWagon
           </a>
         </div>
         <div className="rounded-[2rem] bg-white p-8 shadow-lg ring-1 ring-slate-100">
           <Mail className="text-purple-600" />
           <h2 className="mt-4 text-3xl font-black text-[#17112B]">Contact</h2>
           <p className="mt-3 text-slate-600">
-            Add your email or contact form here when ready.
+            Questions about downloads, prompt packs, licensing, or collaborations? Contact PromptWagon directly.
           </p>
           <a
-            href="mailto:hello@chaimmage.com"
+            href="mailto:info@promptwagon.com"
             className="mt-6 inline-flex rounded-full bg-[#17112B] px-6 py-3 font-black text-white hover:bg-purple-600"
           >
-            Email chaimmage
+            info@promptwagon.com
           </a>
         </div>
       </div>
