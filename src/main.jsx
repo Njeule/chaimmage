@@ -765,6 +765,7 @@ function Collections({ collections, images }) {
 function CollectionDetail({ slug, collections, images }) {
   const collection = collections.find((c) => c.id === slug) || collections[0];
   const collectionImages = images.filter((i) => i.collectionId === collection.id);
+  const category = collection?.primaryCategory || collection?.category || getItemCategories(collection)[0] || "Prompt Collection";
   const categories = getItemCategories(collection);
   const tags = getTags(collection);
 
