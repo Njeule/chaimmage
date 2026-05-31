@@ -213,6 +213,45 @@ function go(path) {
   window.location.hash = path;
 }
 
+function asArray(value) {
+  if (Array.isArray(value)) return value.filter(Boolean);
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+  return [];
+}
+
+function getTags(item) {
+  return asArray(item?.tags);
+}
+
+function getImageCategory(image, collection) {
+  return (
+    image?.category ||
+    image?.primary_category ||
+    image?.primaryCategory ||
+    collection?.category ||
+    collection?.primaryCategory ||
+    "AI Image"
+  );
+}
+
+function getItemCategories(item) {
+  return [
+    item?.category,
+    item?.primary_category,
+    item?.primaryCategory,
+    ...asArray(item?.categories),
+  ].filter(Boolean);
+}
+
+function getPromptPackLink(item, fallback = KO_FI_URL) {
+  return item?.promptPackLink || item?.stripePaymentLinkUrl || fallback;
+}
+
 function Header() {
   const links = [
     ["Gallery", "#/gallery"],
@@ -425,7 +464,9 @@ function PromptPackBox({ link = "", collectionTitle = "this collection" }) {
 }
 
 function ImageCard({ image, collection }) {
-  const link = image.promptPackLink || collection?.promptPackLink || KO_FI_URL;
+  const link = getPromptPackLink(image, getPromptPackLink(collection));
+  const category = getImageCategory(image, collection);
+  const tags = [...getTags(image), ...getTags(collection)].slice(0, 3);
   return (
     <article className="group overflow-hidden rounded-[2rem] bg-white shadow-lg ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-2xl">
       <a href={`#/image/${image.id}`} className="block overflow-hidden">
@@ -439,7 +480,7 @@ function ImageCard({ image, collection }) {
       <div className="p-5">
         <div className="mb-2 flex items-center justify-between gap-3">
           <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-black text-purple-700">
-            {image.category || collection?.category || "AI Image"}
+            {category}
           </span>
           <span className="text-xs font-bold text-slate-400">{PROMPT_PRICE} prompt</span>
         </div>
@@ -447,6 +488,15 @@ function ImageCard({ image, collection }) {
         <p className="mt-1 line-clamp-1 text-sm text-slate-500">
           {collection?.title || "Prompt collection"}
         </p>
+        {tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <span key={tag} className="rounded-full bg-slate-100 px-2 py-1 text-[11px] font-bold text-slate-500">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="mt-4 grid grid-cols-2 gap-2">
           <a
             href={image.download}
@@ -472,6 +522,8 @@ function ImageCard({ image, collection }) {
 
 function CollectionCard({ collection, images }) {
   const collectionImages = images.filter((img) => img.collectionId === collection.id).slice(0, 4);
+  const category = collection.primaryCategory || collection.category || "Collection";
+  const tags = getTags(collection).slice(0, 3);
   return (
     <article className="overflow-hidden rounded-[2rem] bg-white p-4 shadow-lg ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-2xl">
       <div className="grid grid-cols-2 gap-2">
@@ -488,12 +540,21 @@ function CollectionCard({ collection, images }) {
       <div className="p-3">
         <div className="mt-2 flex items-center justify-between">
           <span className="rounded-full bg-pink-100 px-3 py-1 text-xs font-black text-pink-600">
-            {collection.category || "Collection"}
+            {category}
           </span>
           <span className="text-xs font-black text-purple-600">{PROMPT_PRICE}</span>
         </div>
         <h3 className="mt-3 text-xl font-black text-[#17112B]">{collection.title}</h3>
         <p className="mt-2 line-clamp-2 text-sm text-slate-600">{collection.description}</p>
+        {tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <span key={tag} className="rounded-full bg-slate-100 px-2 py-1 text-[11px] font-bold text-slate-500">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="mt-5 grid grid-cols-2 gap-2">
           <a
             href={`#/collection/${collection.id}`}
@@ -502,7 +563,7 @@ function CollectionCard({ collection, images }) {
             View
           </a>
           <a
-            href={collection.promptPackLink || KO_FI_URL}
+            href={getPromptPackLink(collection)}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center rounded-full bg-[#17112B] px-4 py-3 text-sm font-black text-white hover:bg-purple-600"
@@ -568,9 +629,9 @@ function Home({ collections, images, notice, loading }) {
           <ShieldCheck className="text-cyan-500" size={34} />
           <h2 className="mt-4 text-3xl font-black text-[#17112B]">No login needed.</h2>
           <p className="mt-4 text-slate-600">
-            Visitors browse and download free images directly. Paid prompt packs
-            are handled through Ko-fi, keeping PromptWagon simple, fast, and
-            creator-friendly.
+            Visitors can browse and download free images instantly. Paid prompt
+            packs and optional donations are processed securely through external
+            checkout, keeping PromptWagon simple, fast, and creator-friendly.
           </p>
           <a
             href="#/licence"
@@ -600,16 +661,36 @@ function Gallery({ collections, images }) {
   const [category, setCategory] = useState("All");
   const [collectionId, setCollectionId] = useState("All");
 
-  const categories = useMemo(
-    () => ["All", ...Array.from(new Set(images.map((i) => i.category).filter(Boolean)))],
-    [images]
+  const collectionById = useMemo(
+    () => Object.fromEntries(collections.map((collection) => [collection.id, collection])),
+    [collections]
   );
 
+  const categories = useMemo(() => {
+    const allCategories = images.flatMap((image) => {
+      const collection = collectionById[image.collectionId];
+      return [...getItemCategories(image), ...getItemCategories(collection)];
+    });
+    return ["All", ...Array.from(new Set(allCategories)).sort((a, b) => a.localeCompare(b))];
+  }, [images, collectionById]);
+
   const filtered = images.filter((image) => {
-    const collection = collections.find((c) => c.id === image.collectionId);
-    const text = `${image.title} ${image.category} ${collection?.title || ""}`.toLowerCase();
+    const collection = collectionById[image.collectionId];
+    const searchableParts = [
+      image.title,
+      image.alt,
+      image.caption,
+      ...getItemCategories(image),
+      ...getTags(image),
+      collection?.title,
+      collection?.description,
+      ...getItemCategories(collection),
+      ...getTags(collection),
+    ];
+    const text = searchableParts.filter(Boolean).join(" ").toLowerCase();
+    const imageCategories = [...getItemCategories(image), ...getItemCategories(collection)];
     const matchesQuery = text.includes(query.toLowerCase());
-    const matchesCategory = category === "All" || image.category === category;
+    const matchesCategory = category === "All" || imageCategories.includes(category);
     const matchesCollection = collectionId === "All" || image.collectionId === collectionId;
     return matchesQuery && matchesCategory && matchesCollection;
   });
@@ -684,13 +765,15 @@ function Collections({ collections, images }) {
 function CollectionDetail({ slug, collections, images }) {
   const collection = collections.find((c) => c.id === slug) || collections[0];
   const collectionImages = images.filter((i) => i.collectionId === collection.id);
+  const categories = getItemCategories(collection);
+  const tags = getTags(collection);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr]">
         <div>
           <p className="font-black uppercase tracking-wider text-purple-600">
-            {collection.category || "Collection"}
+            {category}
           </p>
           <h1 className="mt-3 text-4xl font-black text-[#17112B] sm:text-6xl">
             {collection.title}
@@ -698,6 +781,15 @@ function CollectionDetail({ slug, collections, images }) {
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
             {collection.description}
           </p>
+          {(categories.length > 0 || tags.length > 0) && (
+            <div className="mt-5 flex flex-wrap gap-2">
+              {[...categories, ...tags].slice(0, 12).map((item) => (
+                <span key={item} className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm ring-1 ring-slate-100">
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {collectionImages.map((image) => (
               <ImageCard key={image.id} image={image} collection={collection} />
@@ -706,7 +798,7 @@ function CollectionDetail({ slug, collections, images }) {
         </div>
         <aside className="lg:sticky lg:top-28 lg:self-start">
           <PromptPackBox
-            link={collection.promptPackLink || KO_FI_URL}
+            link={getPromptPackLink(collection)}
             collectionTitle={collection.title}
           />
         </aside>
@@ -718,6 +810,8 @@ function CollectionDetail({ slug, collections, images }) {
 function ImageDetail({ slug, collections, images }) {
   const image = images.find((i) => i.id === slug) || images[0];
   const collection = collections.find((c) => c.id === image.collectionId);
+  const category = getImageCategory(image, collection);
+  const tags = [...getTags(image), ...getTags(collection)].slice(0, 12);
 
   return (
     <main className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8">
@@ -730,7 +824,7 @@ function ImageDetail({ slug, collections, images }) {
       </div>
       <div>
         <p className="font-black uppercase tracking-wider text-pink-500">
-          {image.category || "AI Image"}
+          {category}
         </p>
         <h1 className="mt-3 text-4xl font-black text-[#17112B]">{image.title}</h1>
         <p className="mt-4 text-slate-600">
@@ -740,6 +834,15 @@ function ImageDetail({ slug, collections, images }) {
           </a>{" "}
           prompt set.
         </p>
+        {tags.length > 0 && (
+          <div className="mt-5 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span key={tag} className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm ring-1 ring-slate-100">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="mt-7 grid gap-3 sm:grid-cols-2">
           <a
             href={image.download}
@@ -750,7 +853,7 @@ function ImageDetail({ slug, collections, images }) {
             <Download size={18} /> Download Free Image
           </a>
           <a
-            href={image.promptPackLink || collection?.promptPackLink || KO_FI_URL}
+            href={getPromptPackLink(image, getPromptPackLink(collection))}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center rounded-full bg-[#17112B] px-6 py-4 font-black text-white hover:bg-purple-600"
@@ -761,7 +864,7 @@ function ImageDetail({ slug, collections, images }) {
 
         <div className="mt-8">
           <PromptPackBox
-            link={image.promptPackLink || collection?.promptPackLink || KO_FI_URL}
+            link={getPromptPackLink(image, getPromptPackLink(collection))}
             collectionTitle={collection?.title || "this collection"}
           />
         </div>
@@ -824,8 +927,9 @@ function Licence() {
         </PolicyCard>
 
         <PolicyCard title="3. Paid prompt-pack licence">
-          Prompt packs purchased for {PROMPT_PRICE} through Ko-fi are licensed to
-          the buyer for unlimited personal and commercial creative use. Buyers
+          Prompt packs purchased for {PROMPT_PRICE} through PromptWagon's external
+          checkout are licensed to the buyer for unlimited personal and
+          commercial creative use. Buyers
           may use the prompts to generate new images, adapt the prompts for their
           own workflow, and use resulting outputs in personal or commercial
           projects, subject to the rules of any AI tool or third-party platform
@@ -866,11 +970,12 @@ function Licence() {
           before publication, resale, advertising, or commercial use.
         </PolicyCard>
 
-        <PolicyCard title="8. Third-party platforms and payment">
-          Paid prompt packs are currently sold and delivered through Ko-fi.
-          Purchases, payment processing, receipts, refunds, account access, and
-          digital delivery may be subject to Ko-fi’s own terms and policies in
-          addition to these PromptWagon licence terms.
+        <PolicyCard title="8. Third-party checkout and payment">
+          Paid prompt packs and optional donations are processed securely through
+          external checkout providers. Purchases, payment processing, receipts,
+          refunds, account access, and digital delivery may be subject to the
+          relevant checkout provider’s own terms and policies in addition to
+          these PromptWagon licence terms.
         </PolicyCard>
 
         <PolicyCard title="9. No exclusivity">
@@ -921,13 +1026,14 @@ function Support() {
         icon={<Gift />}
         label="Support"
         title="Help keep PromptWagon growing."
-        text="Images are free to download. Prompt packs and donations help support storage, organisation, new collections, and ongoing improvements."
+        text="Images are free to download. Paid prompt packs and optional donations help support storage, organisation, new collections, and ongoing improvements."
       />
       <div className="grid gap-6 md:grid-cols-2">
         <div className="rounded-[2rem] bg-gradient-to-br from-purple-600 to-pink-500 p-8 text-white shadow-[0_24px_80px_rgba(124,58,237,0.25)]">
-          <h2 className="text-3xl font-black">Donate on Ko-fi</h2>
+          <h2 className="text-3xl font-black">Optional donations</h2>
           <p className="mt-3 text-white/80">
-            A small donation helps keep the free image library available.
+            Optional donations are processed securely through external checkout
+            and help keep the free image library available.
           </p>
           <a
             href={KO_FI_URL}

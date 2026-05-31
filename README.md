@@ -7,7 +7,8 @@ React + Vite + Tailwind site for PromptWagon, a creative AI asset marketplace fo
 - Brand: PromptWagon
 - Website: https://promptwagon.com
 - Contact: info@promptwagon.com
-- Ko-fi/shop: https://ko-fi.com/promptwagon
+- Optional donations URL: https://ko-fi.com/promptwagon
+- Paid prompt packs: use the live `promptPackLink` / `stripePaymentLinkUrl` values from `collections.json`
 - Prompt pack price: $2.99
 
 ## Assets included
@@ -54,4 +55,4 @@ dist
 
 ## Notes
 
-The site is configured for the live PromptWagon brand, pricing, shop URL, contact email, logo, icon, and launch licence terms.
+The site is configured for the live PromptWagon brand, pricing, external checkout wording, contact email, logo, browser favicon, gallery category/tag support, and launch licence terms.
